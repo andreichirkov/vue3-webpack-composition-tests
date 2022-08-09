@@ -3,6 +3,7 @@
     <span class="panel-tabs">
       <a v-for="period in periods"
          :class="{'is-active': period === currentPeriod}"
+         :data-test="period"
          @click="setPeriod(period)"
          :key="period">
         {{ period }}
@@ -24,13 +25,13 @@ import {defineComponent, ref, computed} from 'vue';
 import moment from "moment";
 import {today, thisWeek, thisMonth} from "@/mocks";
 
-type Period = 'Today' | 'This week' | 'This month'
+type Period = 'Today' | 'This Week' | 'This Month'
 
 export default defineComponent({
   name: 'Timeline',
 
   setup() {
-    const periods = ['Today', 'This week', 'This month']
+    const periods = ['Today', 'This Week', 'This Month']
     const currentPeriod = ref<Period>('Today')
     const posts = computed(() => {
       return [today, thisWeek, thisMonth].filter(post => {
@@ -39,11 +40,11 @@ export default defineComponent({
           return post.created.isAfter(moment().subtract(1, 'day'))
         }
 
-        if(currentPeriod.value === 'This week') {
+        if(currentPeriod.value === 'This Week') {
           return post.created.isAfter(moment().subtract(1, 'week'))
         }
 
-        if(currentPeriod.value === 'This month') {
+        if(currentPeriod.value === 'This Month') {
           return post.created.isAfter(moment().subtract(1, 'month'))
         }
 

@@ -8,18 +8,18 @@ export interface Post {
 
 export const today: Post = {
     id: '1',
-    title: 'today1',
+    title: 'Today',
     created: moment()
 }
 
 export const thisWeek: Post = {
     id: '2',
-    title: 'This week',
+    title: 'This Week',
     created: moment().subtract(2, 'days')
 }
 
 export const thisMonth: Post = {
     id: '2',
-    title: 'This month',
+    title: 'This Month',
     created: moment().subtract(12, 'days')
 }
