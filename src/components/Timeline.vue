@@ -10,13 +10,10 @@
       </a>
     </span>
 
-    <a v-for="post in posts"
-       class="panel-block"
-       :key="post.id">
-      <a>{{ post.title }}</a>
-      <div>{{ post.created.format('Do MMM') }}</div>
-    </a>
-
+    <timeline-post
+        v-for="post in posts"
+        :post="post"
+        :key="post.id"/>
   </nav>
 </template>
 
@@ -24,27 +21,28 @@
 import {defineComponent, ref, computed} from 'vue';
 import moment from "moment";
 import {today, thisWeek, thisMonth} from "@/mocks";
+import TimelinePost from "@/components/TimelinePost.vue";
 
 type Period = 'Today' | 'This Week' | 'This Month'
 
 export default defineComponent({
   name: 'Timeline',
-
+  components: {TimelinePost},
   setup() {
     const periods = ['Today', 'This Week', 'This Month']
     const currentPeriod = ref<Period>('Today')
     const posts = computed(() => {
       return [today, thisWeek, thisMonth].filter(post => {
-        if(currentPeriod.value === 'Today') {
+        if (currentPeriod.value === 'Today') {
           //Сегодня = 1 день после вчера
           return post.created.isAfter(moment().subtract(1, 'day'))
         }
 
-        if(currentPeriod.value === 'This Week') {
+        if (currentPeriod.value === 'This Week') {
           return post.created.isAfter(moment().subtract(1, 'week'))
         }
 
-        if(currentPeriod.value === 'This Month') {
+        if (currentPeriod.value === 'This Month') {
           return post.created.isAfter(moment().subtract(1, 'month'))
         }
 
