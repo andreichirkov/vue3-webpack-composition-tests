@@ -1,7 +1,9 @@
 <template>
   <section class="section">
     <div class="container">
-      <timeline />
+      <suspense>
+        <timeline />
+      </suspense>
     </div>
   </section>
 </template>
