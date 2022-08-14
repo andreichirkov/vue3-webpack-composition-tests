@@ -10,10 +10,14 @@
 
   <div class="columns">
     <div class="column">
-      <div contenteditable ref="contentEditable"></div>
+      <div
+        contenteditable
+        @input="handleInput"
+        ref="contentEditable">
+      </div>
     </div>
     <div class="column">
-      prewiew
+      {{ content }}
     </div>
   </div>
 </template>
@@ -35,6 +39,14 @@ export default defineComponent ({
     const content = ref('Тут текст маркдаун')
     const contentEditable = ref<HTMLDivElement | null>(null)
 
+    const handleInput = () => {
+      if (!contentEditable.value) {
+        throw Error('It never happen')
+      }
+
+      content.value = contentEditable.value.textContent || ''
+    }
+
     onMounted(() => {
       if (!contentEditable.value) {
         throw Error('It never happen')
@@ -46,7 +58,8 @@ export default defineComponent ({
     return {
       title,
       content,
-      contentEditable
+      contentEditable,
+      handleInput
     }
   }
 })
