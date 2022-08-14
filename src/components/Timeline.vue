@@ -26,13 +26,11 @@ import {useStore} from "@/store";
 
 type Period = 'Today' | 'This Week' | 'This Month'
 
-
-
 export default defineComponent({
   name: 'Timeline',
   components: {TimelinePost},
   async setup() {
-    const periods = ['Today', 'This Week', 'This Month']
+    const periods: Period[] = ['Today', 'This Week', 'This Month']
     const currentPeriod = ref<Period>('Today')
     const store = useStore()
 
