@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="column">
-      {{ content }}
+      <div v-html="html"></div>
     </div>
   </div>
 </template>
@@ -25,6 +25,7 @@
 <script lang="ts">
 import {defineComponent, onMounted, ref} from "vue";
 import {Post} from "@/mocks";
+import {parse} from "marked";
 
 export default defineComponent ({
   name: "PostWriter",
@@ -36,7 +37,8 @@ export default defineComponent ({
   },
   setup(props) {
     const title = ref(props.post.title)
-    const content = ref('Тут текст маркдаун')
+    const content = ref('## Тут текст маркдаун')
+    const html = ref(parse(content.value))
     const contentEditable = ref<HTMLDivElement | null>(null)
 
     const handleInput = () => {
@@ -56,6 +58,7 @@ export default defineComponent ({
     })
 
     return {
+      html,
       title,
       content,
       contentEditable,
