@@ -51,7 +51,7 @@ export default defineComponent ({
       }
 
       //При рендере присваиваем html елементу значение из ref-переменной
-      contentEditable.value.textContent = content.value
+      contentEditable.value.innerText = content.value
     })
 
     //Забирает значение из эдитора
@@ -62,13 +62,16 @@ export default defineComponent ({
         throw Error('It never happen')
       }
 
-      content.value = contentEditable.value.textContent || ''
+      content.value = contentEditable.value.innerText || ''
     }
 
     //handleInput триггерит content, отрабатывает cb с заменой html
     watchEffect(() => {
       //Вставляем html с маркдаун разметкой (создаются новые тэги)
-      html.value = parse(content.value)
+      html.value = parse(content.value, {
+        gfm: true,
+        breaks: true
+      })
     })
 
     return {
