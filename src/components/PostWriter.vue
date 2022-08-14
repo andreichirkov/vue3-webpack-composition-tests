@@ -40,27 +40,35 @@ export default defineComponent ({
     const content = ref('## Тут текст маркдаун')
     const html = ref('')
 
-    //handleInput триггерит content, отрабатывает cb с заменой html
-    watchEffect(() => {
-      html.value = parse(content.value)
-    })
-
+    //Правильный способ получить html элемент
     const contentEditable = ref<HTMLDivElement | null>(null)
 
+    //contentEditable на момент хука уже будет существовать (не null)
+    //Получение через Refs
+    onMounted(() => {
+      if (!contentEditable.value) {
+        throw Error('It never happen')
+      }
+
+      //При рендере присваиваем html елементу значение из ref-переменной
+      contentEditable.value.textContent = content.value
+    })
+
+    //Забирает значение из эдитора
     const handleInput = () => {
       if (!contentEditable.value) {
+        //Ошибки не может быть -> функция не отработает до onMounted
+        //Значение будет точно не null
         throw Error('It never happen')
       }
 
       content.value = contentEditable.value.textContent || ''
     }
 
-    onMounted(() => {
-      if (!contentEditable.value) {
-        throw Error('It never happen')
-      }
-
-      contentEditable.value.textContent = content.value
+    //handleInput триггерит content, отрабатывает cb с заменой html
+    watchEffect(() => {
+      //Вставляем html с маркдаун разметкой (создаются новые тэги)
+      html.value = parse(content.value)
     })
 
     return {
