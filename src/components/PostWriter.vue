@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, ref} from "vue";
+import {defineComponent, onMounted, ref, watch} from "vue";
 import {Post} from "@/mocks";
 import {parse} from "marked";
 
@@ -40,6 +40,11 @@ export default defineComponent ({
     const content = ref('## Тут текст маркдаун')
     const html = ref(parse(content.value))
     const contentEditable = ref<HTMLDivElement | null>(null)
+
+    //handleInput триггерит content, отрабатывает cb с заменой html
+    watch(content, (newContent) => {
+      html.value = parse(newContent)
+    })
 
     const handleInput = () => {
       if (!contentEditable.value) {
