@@ -32,11 +32,15 @@ export default defineComponent ({
   },
   setup(props) {
     const title = ref(props.post.title)
-    const content = ref('')
-    const contentEditable = ref(null)
+    const content = ref('Тут текст маркдаун')
+    const contentEditable = ref<HTMLDivElement | null>(null)
 
     onMounted(() => {
-      console.log(typeof contentEditable.value)
+      if (!contentEditable.value) {
+        throw Error('It never happen')
+      }
+
+      contentEditable.value.textContent = content.value
     })
 
     return {
