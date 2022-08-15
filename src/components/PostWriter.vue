@@ -20,6 +20,14 @@
       <div v-html="html"></div>
     </div>
   </div>
+
+  <div class="columns">
+    <div class="column">
+      <button @click="save" class="button is-primary is-pulled-right">
+        Submit
+      </button>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -37,7 +45,8 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
+  emits: ['save'],
+  setup(props, ctx) {
     const title = ref(props.post.title)
     const content = ref('## Тут текст маркдаун')
     const html = ref('')
@@ -85,8 +94,21 @@ export default defineComponent({
     //То же самое в короткой записи
     //watch(content, debounce(parseHtml, 250), {immediate: true})
 
+    const save = () => {
+      const newPost: Post = {
+        //получили id и тд
+        ...props.post,
+        title: title.value,
+        //добавили новые свойства
+        html: html.value,
+        markdown: content.value
+      }
+
+      ctx.emit('save', newPost)
+    }
 
     return {
+      save,
       html,
       title,
       content,

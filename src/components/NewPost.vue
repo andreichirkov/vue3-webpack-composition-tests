@@ -1,5 +1,5 @@
 <template>
- <post-writer :post="newPost" />
+ <post-writer :post="newPost" @save="save" />
 </template>
 
 <script lang="ts">
@@ -7,7 +7,6 @@ import {defineComponent} from "vue";
 import PostWriter from "@/components/PostWriter.vue";
 import {Post} from "@/mocks";
 import moment from "moment";
-import dobounce from 'lodash/debounce'
 
 export default defineComponent ({
   name: "NewPost",
@@ -19,8 +18,13 @@ export default defineComponent ({
       created: moment()
     }
 
+    const save = (post: Post) => {
+      console.log(post)
+    }
+
     return {
-      newPost
+      newPost,
+      save
     }
   }
 })
