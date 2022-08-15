@@ -11,9 +11,9 @@
   <div class="columns">
     <div class="column">
       <div
-        contenteditable
-        @input="handleInput"
-        ref="contentEditable">
+          contenteditable
+          @input="handleInput"
+          ref="contentEditable">
       </div>
     </div>
     <div class="column">
@@ -27,8 +27,9 @@ import {defineComponent, onMounted, ref, watch, watchEffect} from "vue";
 import {Post} from "@/mocks";
 import {parse} from "marked";
 import highlight from 'highlight.js'
+import {debounce} from "lodash";
 
-export default defineComponent ({
+export default defineComponent({
   name: "PostWriter",
   props: {
     post: {
@@ -66,17 +67,24 @@ export default defineComponent ({
       content.value = contentEditable.value.innerText || ''
     }
 
-    //handleInput триггерит content, отрабатывает cb с заменой html
-    watchEffect(() => {
+    const parseHtml = (str: string) => {
       //Вставляем html с маркдаун разметкой (создаются новые тэги)
-      html.value = parse(content.value, {
+      html.value = parse(str, {
         gfm: true,
         breaks: true,
         highlight: (code: string) => {
           return highlight.highlightAuto(code).value
         }
       })
-    })
+    }
+
+    //handleInput триггерит content, отрабатывает cb с заменой html
+    watch(content, debounce((newVal) => {
+      parseHtml(newVal)
+    }, 250), {immediate: true})
+    //То же самое в короткой записи
+    //watch(content, debounce(parseHtml, 250), {immediate: true})
+
 
     return {
       html,
@@ -90,5 +98,7 @@ export default defineComponent ({
 </script>
 
 <style scoped>
-
+.column {
+  overflow-y: scroll;
+}
 </style>
