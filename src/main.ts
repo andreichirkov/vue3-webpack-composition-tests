@@ -3,7 +3,7 @@ import App from './App.vue'
 import axios from "axios";
 import {today, thisWeek, thisMonth, Post} from "@/mocks";
 import router from "./router";
-
+import 'highlight.js/styles/xcode.css'
 
 function delay() {
   return new Promise(res => {

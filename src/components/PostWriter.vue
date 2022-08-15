@@ -26,6 +26,7 @@
 import {defineComponent, onMounted, ref, watch, watchEffect} from "vue";
 import {Post} from "@/mocks";
 import {parse} from "marked";
+import highlight from 'highlight.js'
 
 export default defineComponent ({
   name: "PostWriter",
@@ -70,7 +71,10 @@ export default defineComponent ({
       //Вставляем html с маркдаун разметкой (создаются новые тэги)
       html.value = parse(content.value, {
         gfm: true,
-        breaks: true
+        breaks: true,
+        highlight: (code: string) => {
+          return highlight.highlightAuto(code).value
+        }
       })
     })
 
